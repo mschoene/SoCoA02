@@ -12,21 +12,68 @@ def do_dividieren(envs, args):
     assert do(envs,args[1]) != 0, "Cannot divide by zero!"
     return do(envs,args[0]) / do(envs,args[1])
 
+def do_hochstellen(envs, args):
+    assert len(args)==2
+    return do(envs,args[0])**do(envs,args[1])
+
+
 #2. Print statements
+def do_drucken(envs, args):
+    for i in args:
+        print( do(envs,i ) ) #TODO we can also just force it to only print one, here we print all args on new lines
+
+#  ["waehrend", [["abrufen", "a"] < 5 ], ["abfolge", ["drucken", ["abrufen", "a"]], ["setzen", "a", ["addieren", ["abrufen", "a"], 1 ]]   ]]
 
 #3. While loops
+def do_waehrend(envs,args):
+    assert len(args) == 2
+    while_statement = args[0]
+    body = args[1]
+    while do(envs, while_statement) < 5: #TODO do we want to implement "<" or some other boolean evals?
+        do(envs, body)
+    
 
 #4. Arrays:
-#• Creating a new array of fixed size
-#• Getting the value at position i of an array
-#• Setting the value at position i of an array to a new value
+# Creating a new array of fixed size 
+#Fixed size could mean we use the lenght of the args as the lenght of the array, or the first argument has to be the lenght of the array
+def do_liste(envs,args):
+
+    pass #TODO
+
+# Getting the value at position i of an array
+def do_abrufen_listenObj(envs,args):
+    pass #TODO
+# Setting the value at position i of an array to a new value
+def do_setzen_listenObj(envs,args):
+    pass #TODO
+
 
 #5. Dictionaries:
 #• Creating a new dictionary
 #• Getting the value of a key
 #• Setting the value of a key to a new value
 #• Merging two dictionaries (i.e, implement the | operator of Python)
+def do_woerterbuch(envs,args): 
+    pass #TODO
 
+def do_setzen_schluessel(envs,args):
+    pass #TODO
+
+
+#classe def, obj instantiation
+def do_klasse(envs,args):
+    pass #TODO
+
+
+def do_klassen_instanz(envs, args):
+    pass #TODO
+
+
+
+
+
+
+####### BELOW IS FROM THE LECTURE ##########################
 
 def do_funktion(envs,args):
     assert len(args) == 2
