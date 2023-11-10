@@ -5,12 +5,12 @@ import random
 import logging
 from datetime import datetime
 
-#Multiplication, Division, and Power operations
+# Multiplication, Division, and Power operations
 def do_multiplizieren(envs, args):
     assert len(args) == 2
     return do(envs, args[0]) * do(envs, args[1])
 
-
+# Division
 #divide #but not by ZERO
 def do_dividieren(envs, args):
     assert len(args) == 2
@@ -18,18 +18,18 @@ def do_dividieren(envs, args):
     return do(envs, args[0]) / do(envs, args[1])
 
 
-#Power
+# Power
 def do_hochstellen(envs, args):
     assert len(args) == 2
     return do(envs, args[0])**do(envs, args[1])
 
 
-#2. Print statements
+# Print statements
 def do_drucken(envs, args):
     for i in args:
         print(do(envs, i )) #TODO we can also just force it to only print one, here we print all args on new lines
 
-
+# less than bool 
 def do_kleiner_als(envs, args):
     assert len(args)==2, f"Need exactly 2 args to compare, not {len(args)}"
     left = do(envs, args[0])
@@ -101,12 +101,24 @@ def do_woerterbuch_vereinigung(envs, args):
 
 
 
-#class def, obj instantiation
-def do_klasse(envs,args):
+# ["klasse", "class_name", ]
+# class def, obj instantiation
+def do_klasse(envs,args): # like function
+    assert len(args)> 1, "Need at least an init, innit?"
+    #init -> put in values in a dict
+    #method(s)
     pass #TODO
+    # use woerterbuch
+    # init function
+    # class variables and functions
+    # {"class": {"name":"square", ...}}
 
-
-def do_klassen_instanz(envs, args):
+# set area of circle to value of class
+# Shape 
+def do_klassen_instanz(envs, args): #like do_aufrufen 
+    #what do to with the params
+    #set stuff
+    #so you can do sq = square_new('sq', 3)
     pass #TODO
 
 
@@ -121,7 +133,7 @@ def do_funktion(envs, args):
     body = args[1]
     return ["funktion", params, body]
 
-
+# function call
 def do_aufrufen(envs, args):
     assert len(args) >= 1
     name = args[0]
@@ -253,8 +265,9 @@ def main(args):
 
     if args.trace:
         FORMAT = '%(message)s'
-        logging.basicConfig(filename=args.trace, level=logging.INFO, format=FORMAT)
+        conf_log = logging.basicConfig(filename=args.trace, level=logging.INFO, format=FORMAT)
         logging.info("id,function_name,event,timestamp")
+        envs.append({'trace': conf_log})
 
     result = do(envs, program)
     print(f"=> {result}")
