@@ -1,6 +1,7 @@
 import sys
 import json
 import argparse
+import random
 
 #TODO
 #Multiplication, Division, and Power operations
@@ -115,7 +116,7 @@ def envs_get(envs, name):
     # python like version
     # if name in envs[-1]:
     #    return e[name]
-    #if name in envs[0]:
+    # if name in envs[0]:
     #    return e[name]
     assert False, f"Unknown variable name {name}"
 
@@ -194,12 +195,16 @@ def do(envs, expr):
 def trace_decorator(original_func, filename):
     import logging
     from datetime import datetime
-    logging.basicConfig(filename=filename, level=logging.INFO)
+
+    FORMAT = '%(message)s'
+    logging.basicConfig(filename=filename, level=logging.INFO, format=FORMAT)
 
     def wrapper(*args, **kwargs):
-        logging.info(f'{id(original_func)}, {original_func.__name__}, start, {datetime.now()}')
+        id = int(random.random() * 1000000)
+
+        logging.info(f'{id}, {original_func.__name__}, start, {datetime.now()}')
         result = original_func(*args, **kwargs)
-        logging.info(f'{id(original_func)}, {original_func.__name__}, stop, {datetime.now()}')
+        logging.info(f'{id}, {original_func.__name__}, stop, {datetime.now()}')
         return result
     return wrapper
 
