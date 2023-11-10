@@ -1,11 +1,19 @@
 ["abfolge",
-  ["setzen", "double",
-    ["funktion", ["num"],
-      ["addieren", ["abrufen", "num"], ["abrufen", "num"]]
-    ]
-  ],
   ["setzen", "a", 1],
-  ["aufrufen", "double", ["abrufen", "a"]],
   ["dividieren", 3, 2],
-  ["waehrend", ["abrufen", "a"]  , ["abfolge", ["drucken", ["abrufen", "a"]], ["setzen", "a", ["addieren", ["abrufen", "a"], 1 ]]   ]]
+  ["waehrend",["kleiner_als", ["abrufen", "a"] , 4]  , ["abfolge", ["drucken", ["abrufen", "a"]], ["setzen", "a", ["addieren", ["abrufen", "a"], 1 ]]  ]],
+  ["liste" , ["dividieren", 3, ["abrufen", "a"]],2 ],
+  ["setzen", "listli", ["liste" , ["dividieren", 3, ["abrufen", "a"]],2 ,5 ] ],
+  ["abrufen", "listli"],
+  ["abrufen_listenObj", "listli", 2],
+  ["setzen_listenObj", "listli", 2, 6 ],
+  ["abrufen_listenObj", "listli", 2],
+  ["abrufen", "listli"], 
+  ["woerterbuch", ["liste", 2,3,4,5] , ["liste", 20,30,40,50]],
+  ["setzen", "wobu", ["woerterbuch", ["liste", 2,3,4,5] , ["liste", 20,30,40,50]] ],
+  ["abrufen_schluessel", "wobu", 4 ],
+  ["setzen_schluessel_wert", "wobu", 4, 42 ],
+  ["abrufen_schluessel", "wobu", 4 ],
+  ["setzen", "wobu2", ["woerterbuch", ["liste", 2,30,40,50] , ["liste", 200,300,400,500]] ],
+  ["woerterbuch_vereinigung", ["abrufen", "wobu"], ["abrufen", "wobu2"]]   
 ]
