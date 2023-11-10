@@ -1,28 +1,31 @@
 import sys
 import json
+import argparse
 
 
 #Multiplication, Division, and Power operations
 def do_multiplizieren(envs, args):
-    assert len(args)==2
-    return do(envs,args[0])*do(envs,args[1])
+    assert len(args) == 2
+    return do(envs, args[0]) * do(envs, args[1])
+
 
 #divide #but not by ZERO
 def do_dividieren(envs, args):
-    assert len(args)==2
-    assert do(envs,args[1]) != 0, "Cannot divide by zero!"
-    return do(envs,args[0]) / do(envs,args[1])
+    assert len(args) == 2
+    assert do(envs, args[1]) != 0, "Cannot divide by zero!"
+    return do(envs, args[0]) / do(envs, args[1])
+
 
 #Power
 def do_hochstellen(envs, args):
-    assert len(args)==2
-    return do(envs,args[0])**do(envs,args[1])
+    assert len(args) == 2
+    return do(envs, args[0])**do(envs, args[1])
 
 
 #2. Print statements
 def do_drucken(envs, args):
     for i in args:
-        print( do(envs,i ) ) #TODO we can also just force it to only print one, here we print all args on new lines
+        print(do(envs, i )) #TODO we can also just force it to only print one, here we print all args on new lines
 
 
 def do_kleiner_als(envs, args):
@@ -32,7 +35,7 @@ def do_kleiner_als(envs, args):
     return left < right
 
 #3. While loops
-def do_waehrend(envs,args):
+def do_waehrend(envs, args):
     assert len(args) == 2
     while_statement = args[0]
     body = args[1]
@@ -110,36 +113,37 @@ def do_klassen_instanz(envs, args):
 
 
 ####### BELOW IS FROM THE LECTURE ##########################
-
-def do_funktion(envs,args):
+def do_funktion(envs, args):
     assert len(args) == 2
     params = args[0]
     body = args[1]
-    return ["funktion",params,body]
+    return ["funktion", params, body]
 
-def do_aufrufen(envs,args):
+
+def do_aufrufen(envs, args):
     assert len(args) >= 1
     name = args[0]
     arguments = args[1:]
     # eager evaluation
-    values = [do(envs,arg) for arg in arguments]
+    values = [do(envs, arg) for arg in arguments]
 
-    func = envs_get(envs,name)
-    assert isinstance(func,list)
+    func = envs_get(envs, name)
+    assert isinstance(func, list)
     assert func[0] == "funktion"
     func_params = func[1]
     assert len(func_params) == len(values)
 
-    local_frame = dict(zip(func_params,values))
+    local_frame = dict(zip(func_params, values))
     envs.append(local_frame)
     body = func[2]
-    result = do(envs,body)
+    result = do(envs, body)
     envs.pop()
 
     return result
 
+
 def envs_get(envs, name):
-    assert isinstance(name,str)
+    assert isinstance(name, str)
     for e in reversed(envs):
         if name in e:
             return e[name]   
@@ -150,71 +154,110 @@ def envs_get(envs, name):
     #    return e[name]
     assert False, f"Unknown variable name {name}"
 
-def envs_set(envs,name,value):
+def envs_set(envs, name, value):
     assert isinstance(name,str)
     envs[-1][name] = value
 
-def do_setzen(envs,args):
+
+def do_setzen(envs, args):
     assert len(args) == 2
-    assert isinstance(args[0],str)
+    assert isinstance(args[0], str)
     var_name = args[0]
-    value = do(envs,args[1])
-    envs_set(envs,var_name, value)
+    value = do(envs, args[1])
+    envs_set(envs, var_name, value)
     return value
 
-def do_abrufen(envs,args):
-    assert len(args) == 1
-    return envs_get(envs,args[0])
 
-def do_addieren(envs,args):
+def do_abrufen(envs, args):
+    assert len(args) == 1
+    return envs_get(envs, args[0])
+
+
+def do_addieren(envs, args):
     assert len(args) == 2
-    left = do(envs,args[0])
-    right = do(envs,args[1])
+    left = do(envs, args[0])
+    right = do(envs, args[1])
     return left + right
 
-def do_absolutwert(envs,args):
+
+def do_absolutwert(envs, args):
     assert len(args) == 1
-    value = do(envs,args[0])
+    value = do(envs, args[0])
     return abs(value)
 
-def do_subtrahieren(envs,args):
+
+def do_subtrahieren(envs, args):
     assert len(args) == 2
-    left = do(envs,args[0])
-    right = do(envs,args[1])
+    left = do(envs, args[0])
+    right = do(envs, args[1])
     return left - right
 
-def do_abfolge(envs,args):
+
+def do_abfolge(envs, args):
     assert len(args) > 0
     for operation in args:
-        result = do(envs,operation)
+        result = do(envs, operation)
     return result
 
 
 OPERATIONS = {
-    func_name.replace("do_",""): func_body
+    func_name.replace("do_", ""): func_body
     for (func_name, func_body) in globals().items()
     if func_name.startswith("do_")
 }
 
 
-def do(envs,expr):
-    if isinstance(expr,int):
+def do(envs, expr):
+    if isinstance(expr, int):
         return expr
    
-    assert isinstance(expr,list)
+    assert isinstance(expr, list)
     assert expr[0] in OPERATIONS, f"Unknown operation {expr[0]}"
-    func = OPERATIONS[expr[0]]
+    try:
+        envs_get(envs, 'trace')
+        func = trace_decorator(OPERATIONS[expr[0]], args.trace)
+    except AssertionError:
+        func = OPERATIONS[expr[0]]
     return func(envs, expr[1:])
 
 
-def main():
-    assert len(sys.argv) == 2, "Usage: funcs-demo.py filename.gsc"
+def trace_decorator(original_func, filename):
+    import logging
+    from datetime import datetime
+    logging.basicConfig(filename=filename, level=logging.INFO)
+
+    def wrapper(*args, **kwargs):
+        logging.info(f'{id(original_func)}, {original_func.__name__}, start, {datetime.now()}')
+        result = original_func(*args, **kwargs)
+        logging.info(f'{id(original_func)}, {original_func.__name__}, stop, {datetime.now()}')
+        return result
+    return wrapper
+
+
+def get_args():
+    parser = argparse.ArgumentParser('log the result of your interpreter')
+    parser.add_argument('operations', help='pass in your example operations')
+    parser.add_argument('--trace', default=None, help='log the result of your interpreter')
+
+    args = parser.parse_args()
+    return args
+
+
+def main(args):
+    assert len(sys.argv) >= 2, "Usage: funcs-demo.py filename.gsc"
     with open(sys.argv[1], "r") as source_file:
         program = json.load(source_file)
-    assert isinstance(program,list)
+    assert isinstance(program, list)
     envs = [{}]
-    result = do(envs,program)
+
+    if args.trace:
+        envs.append({'trace': args.trace})
+    result = do(envs, program)
     print(f"=> {result}")
 
+
 if __name__ == "__main__":
-    main()
+    args = get_args()
+    main(args)
+
+
