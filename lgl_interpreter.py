@@ -2,7 +2,8 @@ import sys
 import json
 import argparse
 import random
-
+import logging
+from datetime import datetime
 
 #Multiplication, Division, and Power operations
 def do_multiplizieren(envs, args):
@@ -216,18 +217,13 @@ def do(envs, expr):
     assert expr[0] in OPERATIONS, f"Unknown operation {expr[0]}"
     try:
         envs_get(envs, 'trace')
-        func = trace_decorator(OPERATIONS[expr[0]], args.trace)
+        func = trace_decorator(OPERATIONS[expr[0]]) 
     except AssertionError:
         func = OPERATIONS[expr[0]]
     return func(envs, expr[1:])
 
 
-def trace_decorator(original_func, filename):
-    import logging
-    from datetime import datetime
-
-    FORMAT = '%(message)s'
-    logging.basicConfig(filename=filename, level=logging.INFO, format=FORMAT)
+def trace_decorator(original_func):
 
     def wrapper(*args, **kwargs):
         id = int(random.random() * 1000000)
@@ -256,7 +252,10 @@ def main(args):
     envs = [{}]
 
     if args.trace:
-        envs.append({'trace': args.trace})
+        FORMAT = '%(message)s'
+        logging.basicConfig(filename=args.trace, level=logging.INFO, format=FORMAT)
+        logging.info("id,function_name,event,timestamp")
+
     result = do(envs, program)
     print(f"=> {result}")
 
