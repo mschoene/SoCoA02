@@ -21,7 +21,7 @@ def do_dividieren(envs, args):
 # Power
 def do_hochstellen(envs, args):
     assert len(args) == 2
-    return do(envs, args[0])**do(envs, args[1])
+    return int(do(envs, args[0]))**int(do(envs, args[1]))
 
 
 # Print statements
@@ -49,7 +49,7 @@ def do_waehrend(envs, args):
 # accept input ["liste", 2,3,4,5] == list of lenght 4
 # also accepts an empty list ["liste"] #no comma for empty list!
 def do_liste(envs,args):
-    return [do(envs,arg) for arg in args] 
+    return [do(envs,arg) for arg in args]
 
 # Getting the value at position i of an array
 # ["abrufen_listenObj", "listenName", i] where I starts from 0 cause python
@@ -76,7 +76,7 @@ def do_woerterbuch(envs,args):
     keys = do(envs, args[0])
     values = do(envs, args[1])
     assert len(keys)==len(values), "Keys and values should have the same length"
-    return {do(envs,keys[i]):do(envs,values[i]) for i in range(len(keys))} 
+    return {do(envs,keys[i]):do(envs,values[i]) for i in range(len(keys))}
 
 # Getting the value of a key
 def do_abrufen_schluessel(envs,args):
@@ -101,25 +101,52 @@ def do_woerterbuch_vereinigung(envs, args):
 
 
 
-# ["klasse", "class_name", ]
-# class def, obj instantiation
-def do_klasse(envs,args): # like function
-    assert len(args)> 1, "Need at least an init, innit?"
-    #init -> put in values in a dict
-    #method(s)
-    pass #TODO
-    # use woerterbuch
-    # init function
-    # class variables and functions
-    # {"class": {"name":"square", ...}}
+# ["klasse", ["setzen", "Square", ["woerterbuch", ["liste", "_classname", "_parent", "suqare_area"], ["liste", "Square", "None", ["funktion", "thing", ["hochstellen", [["abrufen_schluessel", "thing", "side_length"], 2]]]]]]]
+def do_klasse(envs, args):
+    assert len(args) == 1
+    do(envs, args[0])
 
-# set area of circle to value of class
-# Shape 
-def do_klassen_instanz(envs, args): #like do_aufrufen 
-    #what do to with the params
-    #set stuff
-    #so you can do sq = square_new('sq', 3)
-    pass #TODO
+
+# ["klasse_instanz", ["woerterbuch", ["liste", "name", "side", "_class"], ["liste", "sq", "3", ["abrufen", "Square"]]]]
+def do_klassen_instanz(envs, args):
+    assert len(args) == 1
+    do(envs, args[0])
+
+
+def do_klassen_aufrufen(envs, args):
+    assert len(args) >= 2
+    thing = args[0]
+    assert isinstance(args[1], str)
+    method_name = args[1]
+    arguments = args[2:]
+
+    values = [do(envs, arg) for arg in arguments]
+
+    func = do_klassen_finden(do(envs,thing)['_class'], method_name)
+    assert isinstance(func, list)
+    assert func[0] == "funktion"
+
+    func_params = func[1]
+    assert len(func_params) == len(values)
+    local_frame = dict(zip(func_params, values))
+    envs.append(local_frame)
+
+    body = func[2]
+    result = do(envs, body)
+    envs.pop()
+
+    return result
+
+def do_klassen_finden(thing_class, name):
+    assert isinstance(thing_class, dict)
+    assert isinstance(name, str)
+    if name in thing_class:
+        return thing_class[name]
+    if thing_class['_parent'] == 'None':
+        raise NotImplementedError(f" {name} is not implemented")
+    return do_klassen_finden(thing_class['_parent'], name)
+
+
 
 
 
@@ -127,6 +154,7 @@ def do_klassen_instanz(envs, args): #like do_aufrufen
 
 
 ####### BELOW IS FROM THE LECTURE ##########################
+
 def do_funktion(envs, args):
     assert len(args) == 2
     params = args[0]
@@ -160,17 +188,25 @@ def envs_get(envs, name):
     assert isinstance(name, str)
     for e in reversed(envs):
         if name in e:
-            return e[name]   
+            return e[name]
+        for value in e.values():
+            if isinstance(value, dict):
+                result = envs_get([value], name)
+                if result is not None:
+                    return result
+    # for e in reversed(envs):
+    #     if name in e:
+    #         return e[name]
     # python like version
     # if name in envs[-1]:
     #    return e[name]
     # if name in envs[0]:
     #    return e[name]
-    assert False, f"Unknown variable name {name}"
+    # assert False, f"Unknown variable name {name}"
 
 def envs_set(envs, name, value):
     assert isinstance(name,str)
-    envs[-1][name] = value
+    envs.append({name: value})
 
 
 def do_setzen(envs, args):
@@ -222,7 +258,7 @@ OPERATIONS = {
 
 
 def do(envs, expr):
-    if isinstance(expr, int):
+    if not isinstance(expr, list):
         return expr
    
     assert isinstance(expr, list)
@@ -238,7 +274,10 @@ def do(envs, expr):
 def trace_decorator(original_func):
 
     def wrapper(*args, **kwargs):
-        id = int(random.random() * 1000000)
+        # rand = str(random.random())
+        rand = random.random()
+        # id = round(int(rand) * 10000000) if rand[2] == '0' else round(int(rand) * 1000000)
+        id = round(rand * 1000000)
 
         logging.info(f'{id}, {original_func.__name__}, start, {datetime.now()}')
         result = original_func(*args, **kwargs)
@@ -261,7 +300,7 @@ def main(args):
     with open(sys.argv[1], "r") as source_file:
         program = json.load(source_file)
     assert isinstance(program, list)
-    envs = [{}]
+    envs = []
 
     if args.trace:
         FORMAT = '%(message)s'
@@ -270,8 +309,10 @@ def main(args):
         envs.append({'trace': conf_log})
 
     result = do(envs, program)
+    # print(envs)
+    # test = ["square_area"]
+    # print(do_abrufen(envs, test))
     print(f"=> {result}")
-
 
 if __name__ == "__main__":
     args = get_args()

@@ -1,68 +1,12 @@
-######## SHAPE ########
-def shape_density(instance, weight):
-    area = call(instance, "area")
-    return weight / area
+["abfolge",
+["klasse", ["setzen", "Shape", ["woerterbuch", ["liste", "_classname", "_parent", "density"], ["liste", "Shape", "None", ["funktion", ["thing", "weight"], ["dividieren", ["abrufen", "weight"], ["klassen_aufrufen", ["abrufen", "thing"], "area", ["abrufen", "thing"]]]]]]]],
 
-Shape = {
-    'density': shape_density, 
-    '_classname': 'Shape',
-    '_parent': None
-}
+["klasse", ["setzen", "Square", ["woerterbuch", ["liste", "_classname", "_parent", "area"], ["liste", "Square", ["abrufen", "Shape"], ["funktion", ["thing"], ["hochstellen", ["abrufen_schluessel", "thing", "side"], 2]]]]]],
+["klassen_instanz", ["setzen", "sq", ["woerterbuch", ["liste", "name", "side", "_class"], ["liste", "sq", "3", ["abrufen", "Square"]]]]],
 
-######## SQUARE ########
-def square_area(instance):
-    return instance["side"] ** 2
+["klasse", ["setzen", "Circle", ["woerterbuch", ["liste", "_classname", "_parent", "area"], ["liste", "Circle", ["abrufen", "Shape"], ["funktion", ["thing"], ["multiplizieren", ["hochstellen", ["abrufen_schluessel", "thing", "radius"], 2], 3.14]]]]]],
+["klassen_instanz", ["setzen", "ci", ["woerterbuch", ["liste", "name", "radius", "_class"], ["liste", "ci", "2", ["abrufen", "Circle"]]]]],
 
-Square = {
-    'area': square_area,  
-    '_classname': 'Square',
-    '_parent': Shape
-}
 
-def square_new(name, side):
-    square_obj = {
-        'name': name,
-        'side': side,
-        '_class': Square
-    }
-    return square_obj
-
-######## CIRCLE ########
-def circle_area(instance):
-    return instance['radius'] ** 2 * 3.14
-
-Circle = {
-    'area': circle_area,  
-    '_classname': 'Circle',
-    '_parent': Shape
-}
-
-def circle_new(name, radius):
-    circle_obj = {
-        'name': name,
-        'radius': radius,
-        '_class': Circle
-    }
-    return circle_obj
-
-######## Implementation ########
-def call(instance, method_name, *args):
-    method = find(instance["_class"], method_name)
-    return method(instance, *args)
-
-def find(cls, method_name):
-    if method_name in cls:
-        return cls[method_name]
-    else:
-        if cls['_parent'] is None:
-            raise NotImplementedError(f"{method_name} is not implemented in {cls['_classname']}")
-        else:
-            return find(cls["_parent"], method_name)
-
-########### EXECUTION #############
-sq = square_new('sq', 3)
-ci = circle_new('ci', 2)
-
-sum_density = call(sq, "density", 5) + call(ci, "density", 5)
-
-print("Sum of densities:", sum_density)
+["addieren", ["klassen_aufrufen", ["abrufen", "sq"], "density", ["abrufen", "sq"], 5], ["klassen_aufrufen", ["abrufen", "ci"], "density", ["abrufen", "ci"], 5]]
+]
