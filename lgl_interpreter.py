@@ -100,19 +100,18 @@ def do_woerterbuch_vereinigung(envs, args):
     return dict0 | dict1
 
 
-
-# ["klasse", ["setzen", "Square", ["woerterbuch", ["liste", "_classname", "_parent", "suqare_area"], ["liste", "Square", "None", ["funktion", "thing", ["hochstellen", [["abrufen_schluessel", "thing", "side_length"], 2]]]]]]]
+# Supporting class functionalities
 def do_klasse(envs, args):
     assert len(args) == 1
     do(envs, args[0])
 
 
-# ["klasse_instanz", ["woerterbuch", ["liste", "name", "side", "_class"], ["liste", "sq", "3", ["abrufen", "Square"]]]]
 def do_klassen_instanz(envs, args):
     assert len(args) == 1
     do(envs, args[0])
 
 
+# Use this call function instead of the generic call function for inheritance related operations
 def do_klassen_aufrufen(envs, args):
     assert len(args) >= 2
     thing = args[0]
@@ -122,7 +121,7 @@ def do_klassen_aufrufen(envs, args):
 
     values = [do(envs, arg) for arg in arguments]
 
-    func = do_klassen_finden(do(envs,thing)['_class'], method_name)
+    func = do_klassen_finden(do(envs, thing)['_class'], method_name)
     assert isinstance(func, list)
     assert func[0] == "funktion"
 
@@ -137,6 +136,8 @@ def do_klassen_aufrufen(envs, args):
 
     return result
 
+
+# Support function to look for parent object recursively
 def do_klassen_finden(thing_class, name):
     assert isinstance(thing_class, dict)
     assert isinstance(name, str)
@@ -147,19 +148,13 @@ def do_klassen_finden(thing_class, name):
     return do_klassen_finden(thing_class['_parent'], name)
 
 
-
-
-
-
-
-
-####### BELOW IS FROM THE LECTURE ##########################
-
+######## BELOW IS FROM THE LECTURE ########
 def do_funktion(envs, args):
     assert len(args) == 2
     params = args[0]
     body = args[1]
     return ["funktion", params, body]
+
 
 # function call
 def do_aufrufen(envs, args):
@@ -189,20 +184,18 @@ def envs_get(envs, name):
     for e in reversed(envs):
         if name in e:
             return e[name]
-        for value in e.values():
-            if isinstance(value, dict):
-                result = envs_get([value], name)
-                if result is not None:
-                    return result
-    # for e in reversed(envs):
-    #     if name in e:
-    #         return e[name]
+        # for value in e.values():
+        #     if isinstance(value, dict):
+        #         result = envs_get([value], name)
+        #         if result is not None:
+        #             return result
     # python like version
     # if name in envs[-1]:
     #    return e[name]
     # if name in envs[0]:
     #    return e[name]
-    # assert False, f"Unknown variable name {name}"
+    assert False, f"Unknown variable name {name}"
+
 
 def envs_set(envs, name, value):
     assert isinstance(name,str)
@@ -271,13 +264,13 @@ def do(envs, expr):
     return func(envs, expr[1:])
 
 
+# Fixed the id so that a 6 digit number is generated
 def trace_decorator(original_func):
-
     def wrapper(*args, **kwargs):
-        # rand = str(random.random())
-        rand = random.random()
-        # id = round(int(rand) * 10000000) if rand[2] == '0' else round(int(rand) * 1000000)
-        id = round(rand * 1000000)
+        rand = str(random.random())
+        # rand = random.random()
+        id = int(float(rand) * 10000000) if rand[2] == '0' else int(float(rand) * 1000000)
+        # id = round(rand * 1000000)
 
         logging.info(f'{id}, {original_func.__name__}, start, {datetime.now()}')
         result = original_func(*args, **kwargs)
@@ -295,6 +288,7 @@ def get_args():
     return args
 
 
+# One modification for the envs, not necessary to create [{}], just append dict when do_setzen
 def main(args):
     assert len(sys.argv) >= 2, "Usage: funcs-demo.py filename.gsc"
     with open(sys.argv[1], "r") as source_file:
@@ -309,10 +303,9 @@ def main(args):
         envs.append({'trace': conf_log})
 
     result = do(envs, program)
-    # print(envs)
-    # test = ["square_area"]
-    # print(do_abrufen(envs, test))
+    print(envs)
     print(f"=> {result}")
+
 
 if __name__ == "__main__":
     args = get_args()

@@ -16,4 +16,4 @@
   ["abrufen_schluessel", "wobu", 4 ],
   ["setzen", "wobu2", ["woerterbuch", ["liste", 2,30,40,50] , ["liste", 200,300,400,500]] ],
   ["woerterbuch_vereinigung", ["abrufen", "wobu"], ["abrufen", "wobu2"]]
- ]
+]
