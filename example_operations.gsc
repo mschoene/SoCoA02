@@ -1,7 +1,7 @@
 ["abfolge",
   ["setzen", "a", 1],
   ["dividieren", 3, 2],
-  ["waehrend",["kleiner_als", ["abrufen", "a"] , 4]  , ["abfolge", ["drucken", ["abrufen", "a"]], ["setzen", "a", ["addieren", ["abrufen", "a"], 1 ]]  ]],
+  ["waehrend",["kleiner_als", ["abrufen", "a"] , 4], ["abfolge", ["drucken", ["abrufen", "a"]], ["setzen", "a", ["addieren", ["abrufen", "a"], 1 ]]  ]],
   ["liste" , ["dividieren", 3, ["abrufen", "a"]],2 ],
   ["setzen", "listli", ["liste" , ["dividieren", 3, ["abrufen", "a"]],2 ,5 ] ],
   ["abrufen", "listli"],
@@ -15,5 +15,6 @@
   ["setzen_schluessel_wert", "wobu", 4, 42 ],
   ["abrufen_schluessel", "wobu", 4 ],
   ["setzen", "wobu2", ["woerterbuch", ["liste", 2,30,40,50] , ["liste", 200,300,400,500]] ],
-  ["woerterbuch_vereinigung", ["abrufen", "wobu"], ["abrufen", "wobu2"]]   
+  ["woerterbuch_vereinigung", ["abrufen", "wobu"], ["abrufen", "wobu2"]],
+  ["setzen", ["klasse", args, body ]]
 ]
