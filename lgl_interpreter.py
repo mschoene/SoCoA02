@@ -52,7 +52,7 @@ def do_liste(envs,args):
     return [do(envs,arg) for arg in args] 
 
 # Getting the value at position i of an array
-# ["abrufen_listenObj", "listenName", i] where I starts from 0 cause python
+# ["_listenObj", "listabrufenenName", i] where I starts from 0 cause python
 def do_abrufen_listenObj(envs,args):
     assert len(args) == 2, "Need a list name and an index"
     assert isinstance(do(envs,args[1]), int), "Need an interger index"
@@ -101,27 +101,67 @@ def do_woerterbuch_vereinigung(envs, args):
 
 
 
+
 # ["klasse", "class_name", ]
 # class def, obj instantiation
-def do_klasse(envs,args): # like function
-    assert len(args)> 1, "Need at least an init, innit?"
-    #init -> put in values in a dict
-    #method(s)
-    pass #TODO
-    # use woerterbuch
-    # init function
-    # class variables and functions
-    # {"class": {"name":"square", ...}}
-
-# set area of circle to value of class
-# Shape 
-def do_klassen_instanz(envs, args): #like do_aufrufen 
-    #what do to with the params
-    #set stuff
-    #so you can do sq = square_new('sq', 3)
-    pass #TODO
+#init -> put in values in a dict
+#method(s)
+# use woerterbuch
+# init function
+# class variables and functions
+# {"class": {"name":"square", ...}}
+def do_klasse(envs, args):
+    assert args[0][0] == "setzen"
+    assert len(args) == 1
+    do(envs,args[0])
 
 
+def do_klassen_instanz(envs, args):
+    assert args[0][0] == "setzen"
+    assert len(args) == 1
+    do(envs, args[0])
+    
+
+
+def do_aufrufen(envs, args, is_method_call=False):
+    assert len(args) >= 1
+    name_or_thing = args[0]
+    method_name = args[1] if is_method_call else None
+    arguments = args[2:] if is_method_call else args[1:]
+
+    # Eager evaluation
+    values = [do(envs, arg) for arg in arguments]
+
+    if is_method_call:
+        # Method call
+        thing = do(envs, name_or_thing)
+        func = do_finden(thing['_class'], method_name)
+    else:
+        # Regular function call
+        func = envs_get(envs, name_or_thing)
+
+    assert isinstance(func, list)
+    assert func[0] == "funktion"
+    func_params = func[1]
+    assert len(func_params) == len(values)
+
+    local_frame = dict(zip(func_params, values))
+    envs.append(local_frame)
+    body = func[2]
+    result = do(envs, body)
+    envs.pop()
+
+    return result
+
+
+def do_finden(thing, name):
+    if name in thing:
+        return thing[name]
+    else:
+        if thing["_parent"] == None:
+            raise NotImplementedError(f" {name} is not implemented")
+        else:
+            return do_anrufen(thing["_parent"],name)
 
 
 
@@ -222,7 +262,7 @@ OPERATIONS = {
 
 
 def do(envs, expr):
-    if isinstance(expr, int):
+    if isinstance(expr, list):
         return expr
    
     assert isinstance(expr, list)
@@ -271,7 +311,7 @@ def main(args):
 
     result = do(envs, program)
     print(f"=> {result}")
-
+    print(envs)
 
 if __name__ == "__main__":
     args = get_args()
