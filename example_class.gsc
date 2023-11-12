@@ -8,5 +8,5 @@
 ["klassen_instanz", ["setzen", "ci", ["woerterbuch", ["liste", "name", "radius", "_class"], ["liste", "ci", "2", ["abrufen", "Circle"]]]]],
 
 
-["addieren", ["klassen_aufrufen", ["abrufen", "sq"], "density", ["abrufen", "sq"], 5], ["klassen_aufrufen", ["abrufen", "ci"], "density", ["abrufen", "ci"], 5]]
+["drucken", ["addieren", ["klassen_aufrufen", ["abrufen", "sq"], "density", ["abrufen", "sq"], 5], ["klassen_aufrufen", ["abrufen", "ci"], "density", ["abrufen", "ci"], 5]]]
 ]
