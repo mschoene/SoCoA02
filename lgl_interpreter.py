@@ -303,7 +303,6 @@ def main(args):
         envs.append({'trace': conf_log})
 
     result = do(envs, program)
-    print(envs)
     print(f"=> {result}")
 
 
