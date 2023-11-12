@@ -304,7 +304,6 @@ def main(args):
 
     result = do(envs, program)
     print(envs)
-    print(f"=> {result}")
 
 
 if __name__ == "__main__":
