@@ -128,8 +128,10 @@ def do_klassen_instanz(envs, args):
 def do_klassen_aufrufen(envs, args):
     assert len(args) >= 2
     thing = args[0]
-    assert isinstance(args[1], str)
-    method_name = args[1]
+
+    method_name = do(envs, args[1])
+    assert isinstance(method_name, str)
+
     arguments = args[2:]
 
     values = [do(envs, arg) for arg in arguments]
@@ -154,8 +156,11 @@ def do_klassen_aufrufen(envs, args):
 def do_klassen_finden(thing_class, name):
     assert isinstance(thing_class, dict)
     assert isinstance(name, str)
+    alt_name = f"{thing_class['_classname'].lower()}_{name}"
     if name in thing_class:
         return thing_class[name]
+    if alt_name in thing_class:
+        return thing_class[alt_name]
     if thing_class['_parent'] == 'None':
         raise NotImplementedError(f" {name} is not implemented")
     return do_klassen_finden(thing_class['_parent'], name)
@@ -273,9 +278,9 @@ def do(envs, expr):
     try:
         envs_get(envs, 'trace')
         func = OPERATIONS[expr[0]]
-        for env in envs:
-            if expr[0] == 'aufrufen' and expr[1] in env.keys():
-                func = trace_decorator(OPERATIONS[expr[0]], expr[1])
+        for name in expr[1:]:
+            if 'aufrufen' in expr[0] and isinstance(name, str):
+                func = trace_decorator(OPERATIONS[expr[0]], name)
     except AssertionError:
         func = OPERATIONS[expr[0]]
     return func(envs, expr[1:])
