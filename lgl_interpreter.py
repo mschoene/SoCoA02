@@ -11,7 +11,7 @@ def do_multiplizieren(envs, args):
     return do(envs, args[0]) * do(envs, args[1])
 
 # Division
-#divide #but not by ZERO
+# divide #but not by ZERO
 def do_dividieren(envs, args):
     assert len(args) == 2
     assert do(envs, args[1]) != 0, "Cannot divide by zero!"
@@ -21,13 +21,15 @@ def do_dividieren(envs, args):
 # Power
 def do_hochstellen(envs, args):
     assert len(args) == 2
-    return int(do(envs, args[0]))**int(do(envs, args[1]))
+    return float(do(envs, args[0]))**float(do(envs, args[1]))
 
 
-# Print statements
+# Print
 def do_drucken(envs, args):
+    res = ""
     for i in args:
-        print(do(envs, i )) #TODO we can also just force it to only print one, here we print all args on new lines
+        res += str((do(envs, i)))
+    print(res)
 
 # less than bool 
 def do_kleiner_als(envs, args):
@@ -57,8 +59,9 @@ def do_abrufen_listenObj(envs,args):
     assert len(args) == 2, "Need a list name and an index"
     assert isinstance(do(envs,args[1]), int), "Need an interger index"
     list_name = [args[0]]
+    index = do(envs, args[1])
     i_list = do_abrufen(envs, list_name)
-    return i_list[args[1]]
+    return i_list[index]
 
 # Setting the value at position i of an array to a new value
 def do_setzen_listenObj(envs,args):
@@ -66,7 +69,7 @@ def do_setzen_listenObj(envs,args):
     assert isinstance(do(envs,args[1]), int), "Need an interger index"
     list_name, list_id, value  = args 
     temp_list = do_abrufen(envs,[list_name])
-    temp_list[list_id] = do(envs, value) # This also changes the origial list value in the env, aliases for the win
+    temp_list[do(envs,list_id)] = do(envs, value) # This also changes the origial list value in the env, aliases for the win
     return value
 
 
