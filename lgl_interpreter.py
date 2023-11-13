@@ -5,10 +5,12 @@ import random
 import logging
 from datetime import datetime
 
+
 # Multiplication, Division, and Power operations
 def do_multiplizieren(envs, args):
     assert len(args) == 2
     return do(envs, args[0]) * do(envs, args[1])
+
 
 # Division
 # divide #but not by ZERO
@@ -31,12 +33,14 @@ def do_drucken(envs, args):
         res += str((do(envs, i)))
     print(res)
 
+
 # less than bool 
 def do_kleiner_als(envs, args):
     assert len(args)==2, f"Need exactly 2 args to compare, not {len(args)}"
     left = do(envs, args[0])
     right = do(envs, args[1])
     return left < right
+
 
 #3. While loops
 def do_waehrend(envs, args):
@@ -46,12 +50,14 @@ def do_waehrend(envs, args):
     while do(envs, while_statement): #TODO do we want to implement "<" or some other boolean evals?
         do(envs, body)
 
+
 #4. Arrays:
 # Creating a new array of fixed size 
 # accept input ["liste", 2,3,4,5] == list of lenght 4
 # also accepts an empty list ["liste"] #no comma for empty list!
 def do_liste(envs,args):
     return [do(envs,arg) for arg in args]
+
 
 # Getting the value at position i of an array
 # ["abrufen_listenObj", "listenName", i] where I starts from 0 cause python
@@ -62,6 +68,7 @@ def do_abrufen_listenObj(envs,args):
     index = do(envs, args[1])
     i_list = do_abrufen(envs, list_name)
     return i_list[index]
+
 
 # Setting the value at position i of an array to a new value
 def do_setzen_listenObj(envs,args):
@@ -81,12 +88,14 @@ def do_woerterbuch(envs,args):
     assert len(keys)==len(values), "Keys and values should have the same length"
     return {do(envs,keys[i]):do(envs,values[i]) for i in range(len(keys))}
 
+
 # Getting the value of a key
 def do_abrufen_schluessel(envs,args):
     assert len(args) == 2, "Need a dictionary name and an key"
     dict_name = [args[0]]
     i_dict = do_abrufen(envs, dict_name)
     return i_dict[args[1]]
+
 
 # Setting the value of a key to a new value
 def do_setzen_schluessel_wert(envs,args):
@@ -95,6 +104,7 @@ def do_setzen_schluessel_wert(envs,args):
     temp_dict = do_abrufen(envs,[dict_name])
     temp_dict[key] = do(envs, value) # This also changes the origial dict value in the env, aliases for the win
     return value
+
 
 # Merging two dictionaries (i.e, implement the | operator of Python)
 def do_woerterbuch_vereinigung(envs, args):
@@ -259,25 +269,29 @@ def do(envs, expr):
    
     assert isinstance(expr, list)
     assert expr[0] in OPERATIONS, f"Unknown operation {expr[0]}"
+
     try:
         envs_get(envs, 'trace')
-        func = trace_decorator(OPERATIONS[expr[0]]) 
+        func = OPERATIONS[expr[0]]
+        for env in envs:
+            if expr[0] == 'aufrufen' and expr[1] in env.keys():
+                func = trace_decorator(OPERATIONS[expr[0]], expr[1])
     except AssertionError:
         func = OPERATIONS[expr[0]]
     return func(envs, expr[1:])
 
 
 # Fixed the id so that a 6 digit number is generated
-def trace_decorator(original_func):
+def trace_decorator(original_func, name):
     def wrapper(*args, **kwargs):
         rand = str(random.random())
         # rand = random.random()
         id = int(float(rand) * 10000000) if rand[2] == '0' else int(float(rand) * 1000000)
         # id = round(rand * 1000000)
 
-        logging.info(f'{id}, {original_func.__name__}, start, {datetime.now()}')
+        logging.info(f'{id}, {name}, start, {datetime.now()}')
         result = original_func(*args, **kwargs)
-        logging.info(f'{id}, {original_func.__name__}, stop, {datetime.now()}')
+        logging.info(f'{id}, {name}, stop, {datetime.now()}')
         return result
     return wrapper
 
@@ -306,7 +320,6 @@ def main(args):
         envs.append({'trace': conf_log})
 
     do(envs, program)
-
 
 
 if __name__ == "__main__":

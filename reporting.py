@@ -42,7 +42,7 @@ df.rename(columns={'func_name': 'Function Name', 'id': 'Num. of calls', 'time': 
 df['Average Time (ms)'] = df.apply(lambda x: div(x['Total Time (ms)'], x['Num. of calls']), axis=1)
 
 # Making the print pretty
-df.loc[-1] = ['----------------------'] * 4
+df.loc[-1] = ['--------------------'] * 4
 df.index = df.index + 1
 df.sort_index(inplace=True)
 
