@@ -302,8 +302,8 @@ def main(args):
         logging.info("id,function_name,event,timestamp")
         envs.append({'trace': conf_log})
 
-    result = do(envs, program)
-    print(f"=> {result}")
+    do(envs, program)
+
 
 
 if __name__ == "__main__":
