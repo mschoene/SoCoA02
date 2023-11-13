@@ -1,19 +1,27 @@
 ["abfolge",
-  ["setzen", "a", 1],
-  ["dividieren", 3, 2],
-  ["waehrend",["kleiner_als", ["abrufen", "a"] , 4], ["abfolge", ["drucken", ["abrufen", "a"]], ["setzen", "a", ["addieren", ["abrufen", "a"], 1 ]]  ]],
-  ["liste" , ["dividieren", 3, ["abrufen", "a"]],2 ],
-  ["setzen", "listli", ["liste" , ["dividieren", 3, ["abrufen", "a"]],2 ,5 ] ],
-  ["abrufen", "listli"],
-  ["abrufen_listenObj", "listli", 2],
-  ["setzen_listenObj", "listli", 2, 6 ],
-  ["abrufen_listenObj", "listli", 2],
-  ["abrufen", "listli"],
-  ["woerterbuch", ["liste", 2,3,4,5] , ["liste", 20,30,40,50]],
-  ["setzen", "wobu", ["woerterbuch", ["liste", 2,3,4,5] , ["liste", 20,30,40,50]] ],
-  ["abrufen_schluessel", "wobu", 4 ],
-  ["setzen_schluessel_wert", "wobu", 4, 42 ],
-  ["abrufen_schluessel", "wobu", 4 ],
-  ["setzen", "wobu2", ["woerterbuch", ["liste", 2,30,40,50] , ["liste", 200,300,400,500]] ],
-  ["woerterbuch_vereinigung", ["abrufen", "wobu"], ["abrufen", "wobu2"]]
+  ["setzen", "a", 0 ],
+  ["setzen", "li", ["liste" , 0, 1,2,3,4 ]],
+  ["setzen", "li_sq", ["liste" , 0, 1,2,3,4]],
+  ["setzen", "li_double", ["liste" , 0, 1,2,3,4]],
+
+  ["waehrend",["kleiner_als", ["abrufen", "a"] , 5], 
+    ["abfolge", 
+    ["drucken", "iteration nr. ", ["abrufen", "a"]], 
+    ["setzen_listenObj", "li_sq", ["abrufen", "a"], ["hochstellen", ["abrufen", "a"], 2 ] ],
+    ["setzen_listenObj", "li_double", ["abrufen", "a"], ["multiplizieren", ["abrufen", "a"], 2 ] ],
+    ["drucken", "new list value at index is squared ", ["abrufen", "a"] , " = ", ["abrufen_listenObj", "li_sq",  ["abrufen", "a"]]], 
+    ["drucken", "new list value at index is doubled ", ["abrufen", "a"] , " = ", ["abrufen_listenObj", "li_double",  ["abrufen", "a"]]], 
+    ["setzen", "a", ["addieren", ["abrufen", "a"] , 1] ]
+    ] 
+  ],
+  ["setzen", "dict_sq", ["woerterbuch",   ["abrufen", "li"],   ["abrufen", "li_sq"] ] ],
+  ["setzen", "dict_double", ["woerterbuch",   ["abrufen", "li"],   ["abrufen", "li_double"] ] ],
+
+  ["setzen_schluessel_wert", "dict_double", 4, 42 ],
+  ["setzen_schluessel_wert", "dict_double", 3, ["dividieren", 1, ["abrufen_schluessel", "dict_double", 4 ] ]],
+  ["drucken", "the answer is = ",  ["abrufen_schluessel", "dict_double", 4 ]] ,
+  ["drucken", "1/answer is = " , ["abrufen_schluessel", "dict_double", 3 ]] ,
+
+  ["setzen", "wombocombo", ["woerterbuch_vereinigung", ["abrufen", "dict_sq"], ["abrufen", "dict_double"]]],
+  ["drucken", "combined dictionary = ", ["abrufen", "wombocombo"]]
 ]
