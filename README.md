@@ -33,33 +33,34 @@ python reporting.py trace_file.log
 - Print: do_drucken
 
 ### Comparison Operations
-Less Than: do_kleiner_als
+- Less Than: do_kleiner_als
 
 ### Looping
-While Loop: do_waehrend
+- While Loop: do_waehrend
 
 ### Arrays
-Create Array: do_liste
-Get Value at Index: do_abrufen_listenObj
-Set Value at Index: do_setzen_listenObj
+- Create Array: do_liste
+- Get Value at Index: do_abrufen_listenObj
+- Set Value at Index: do_setzen_listenObj
 
 ### Dictionaries
-Create Dictionary: do_woerterbuch
-Get Value by Key: do_abrufen_schluessel
-Set Value by Key: do_setzen_schluessel_wert
-Dictionary Union: do_woerterbuch_vereinigung
+- Create Dictionary: do_woerterbuch
+- Get Value by Key: do_abrufen_schluessel
+- Set Value by Key: do_setzen_schluessel_wert
+- Dictionary Union: do_woerterbuch_vereinigung
 
 ### Class Functionalities
-Define Class: do_klasse
-Create Class Instance: do_klassen_instanz
-Call Class Method: do_klassen_aufrufen
+- Define Class: do_klasse
+- Create Class Instance: do_klassen_instanz
+- Call Class Method: do_klassen_aufrufen
+- Look for parent object recursively: do_klassen_finden
 
 ### Other Operations
-Function Definition: do_funktion
-Function Call: do_aufrufen
-Set Variable: do_setzen
-Get Variable Value: do_abrufen
-Addition: do_addieren
-Absolute Value: do_absolutwert
-Subtraction: do_subtrahieren
-Sequential Execution: do_abfolge
+- Function Definition: do_funktion
+- Function Call: do_aufrufen
+- Set Variable: do_setzen
+- Get Variable Value: do_abrufen
+- Addition: do_addieren
+- Absolute Value: do_absolutwert
+- Subtraction: do_subtrahieren
+- Sequential Execution: do_abfolge
