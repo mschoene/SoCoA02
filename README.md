@@ -12,22 +12,22 @@ These lists are then used to define two dictionaries, where 2 values are afterwa
 
 ## Class Functionality
 To see the class functionality run the following command:
-
+```console
 python lgl_interpreter.py example_class.gsc 
-
+```
 This returns a value of about 0.96 for the sum of the densities.
 
 ## Tracing Functionality
 To trace the duration of the functions defined in lgl run:
-
+```console
 python lgl_interpreter.py example_trace.gsc --trace trace_file.log
-
+```
 
 ## Pretty Reporting
 To see the number of calls, total and average run time of each of the functions defined in lgl in the example_trace.gsc, run:
-
+```console
 python reporting.py trace_file.log
-
+```
 ## Supported Operations 
 ### Mathematical Operations
 - Multiplication: do_multiplizieren
