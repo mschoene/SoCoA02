@@ -14,7 +14,7 @@ To see the class functionality run the following command:
 
 python lgl_interpreter.py example_class.gsc 
 
-Should result in about 0.96.
+This returns a value of about 0.96.
 
 ## Tracing functionality
 python lgl_interpreter.py example_trace.gsc --trace trace_file.log
