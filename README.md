@@ -14,14 +14,16 @@ To see the class functionality run the following command:
 
 python lgl_interpreter.py example_class.gsc 
 
-This returns a value of about 0.96.
+This returns a value of about 0.96 for the sum of the densities.
 
 ## Tracing Functionality
+To trace the duration of the functions defined in lgl run:
+
 python lgl_interpreter.py example_trace.gsc --trace trace_file.log
 
 
 ## Pretty Reporting
-To see the number of calls, total and average run time of each of the lgl in the example trace run:
+To see the number of calls, total and average run time of each of the functions defined in lgl in the example_trace.gsc, run:
 
 python reporting.py trace_file.log
 
@@ -30,7 +32,9 @@ python reporting.py trace_file.log
 - Multiplication: do_multiplizieren
 - Division: do_dividieren (Does not allow division by zero)
 - Power: do_hochstellen
-- Print: do_drucken
+- Addition: do_addieren
+- Absolute Value: do_absolutwert
+- Subtraction: do_subtrahieren
 
 ### Comparison Operations
 - Less Than: do_kleiner_als
@@ -60,7 +64,5 @@ python reporting.py trace_file.log
 - Function Call: do_aufrufen
 - Set Variable: do_setzen
 - Get Variable Value: do_abrufen
-- Addition: do_addieren
-- Absolute Value: do_absolutwert
-- Subtraction: do_subtrahieren
+- Print: do_drucken
 - Sequential Execution: do_abfolge
