@@ -34,7 +34,7 @@ def do_drucken(envs, args):
     print(res)
 
 
-# less than bool 
+# Less than, returns True if left is smaller than right
 def do_kleiner_als(envs, args):
     assert len(args)==2, f"Need exactly 2 args to compare, not {len(args)}"
     left = do(envs, args[0])
@@ -42,7 +42,7 @@ def do_kleiner_als(envs, args):
     return left < right
 
 
-#3. While loops
+# While loop
 def do_waehrend(envs, args):
     assert len(args) == 2
     while_statement = args[0]
@@ -51,7 +51,7 @@ def do_waehrend(envs, args):
         do(envs, body)
 
 
-#4. Arrays:
+# Arrays:
 # Creating a new array of fixed size 
 # accept input ["liste", 2,3,4,5] == list of lenght 4
 # also accepts an empty list ["liste"] #no comma for empty list!
@@ -202,16 +202,6 @@ def envs_get(envs, name):
     for e in reversed(envs):
         if name in e:
             return e[name]
-        # for value in e.values():
-        #     if isinstance(value, dict):
-        #         result = envs_get([value], name)
-        #         if result is not None:
-        #             return result
-    # python like version
-    # if name in envs[-1]:
-    #    return e[name]
-    # if name in envs[0]:
-    #    return e[name]
     assert False, f"Unknown variable name {name}"
 
 
@@ -285,14 +275,12 @@ def do(envs, expr):
         func = OPERATIONS[expr[0]]
     return func(envs, expr[1:])
 
-
-# Fixed the id so that a 6 digit number is generated
+# Function wrapper for timing
 def trace_decorator(original_func, name):
     def wrapper(*args, **kwargs):
         rand = str(random.random())
-        # rand = random.random()
+        # Fixed the id so that a 6 digit number is generated
         id = int(float(rand) * 10000000) if rand[2] == '0' else int(float(rand) * 1000000)
-        # id = round(rand * 1000000)
 
         logging.info(f'{id}, {name}, start, {datetime.now()}')
         result = original_func(*args, **kwargs)
