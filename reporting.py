@@ -1,6 +1,7 @@
 import pandas as pd
+import sys
 
-filename = 'trace_file.log'
+filename =  sys.argv[1] 
 
 def diff(a, b):
     return (b - a) / 1000
