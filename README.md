@@ -4,9 +4,9 @@ Welcome to the Little German Language (LGL) user guide, where everything is 3 ti
 # Usage
 ## Basics
 To test the basic functionality of the LGL run the following command:
-'''console
+```console
 python lgl_language.py example_operations.gsc
-'''
+```
 This will print the result of a while loop, setting the values doubled and squared in a list each. 
 These lists are then used to define two dictionaries, where 2 values are afterwards updated. In the end the dictionaries are combined together.
 
