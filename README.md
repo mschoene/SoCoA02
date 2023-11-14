@@ -26,35 +26,35 @@ To see the number of calls, total and average run time of each of the lgl in the
 python reporting.py trace_file.log
 
 ## Supported Operations 
-# Mathematical Operations
+### Mathematical Operations
 Multiplication: do_multiplizieren
 Division: do_dividieren (Does not allow division by zero)
 Power: do_hochstellen
 Print: do_drucken
 
-# Comparison Operations
+### Comparison Operations
 Less Than: do_kleiner_als
 
-# Looping
+### Looping
 While Loop: do_waehrend
 
-# Arrays
+### Arrays
 Create Array: do_liste
 Get Value at Index: do_abrufen_listenObj
 Set Value at Index: do_setzen_listenObj
 
-# Dictionaries
+### Dictionaries
 Create Dictionary: do_woerterbuch
 Get Value by Key: do_abrufen_schluessel
 Set Value by Key: do_setzen_schluessel_wert
 Dictionary Union: do_woerterbuch_vereinigung
 
-# Class Functionalities
+### Class Functionalities
 Define Class: do_klasse
 Create Class Instance: do_klassen_instanz
 Call Class Method: do_klassen_aufrufen
 
-# Other Operations
+### Other Operations
 Function Definition: do_funktion
 Function Call: do_aufrufen
 Set Variable: do_setzen
