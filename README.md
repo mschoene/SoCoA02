@@ -27,10 +27,10 @@ python reporting.py trace_file.log
 
 ## Supported Operations 
 ### Mathematical Operations
-Multiplication: do_multiplizieren
-Division: do_dividieren (Does not allow division by zero)
-Power: do_hochstellen
-Print: do_drucken
+- Multiplication: do_multiplizieren
+- Division: do_dividieren (Does not allow division by zero)
+- Power: do_hochstellen
+- Print: do_drucken
 
 ### Comparison Operations
 Less Than: do_kleiner_als
