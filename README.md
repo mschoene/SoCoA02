@@ -4,6 +4,7 @@ Welcome to the Little German Language (LGL) user guide, where everything is 3 ti
 # Usage
 ## Basics
 To test the basic functionality of the LGL run the following command:
+
 python lgl_language.py example_operations.gsc
 
 This will print the result of a while loop, setting the values doubled and squared in a list each. 
